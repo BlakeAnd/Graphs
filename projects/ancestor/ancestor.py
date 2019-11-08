@@ -6,8 +6,6 @@ def earliest_ancestor(ancestors, starting_node):
     print("ancestors 0 0:", ancestors[0][0])
     print("starting_node:", starting_node)
     graph = Graph()
-
-
     
     for edge in ancestors:
       graph.add_vertex(edge[0])
@@ -24,11 +22,14 @@ def earliest_ancestor(ancestors, starting_node):
 
     while q.size() > 0:
       current = q.dequeue()
-      
-      
+          
       print("curr", current)
       # print(graph.vertices[1])
-      curr_path = paths[-1]
+      for i in range(len(paths)-1, -1, -1):
+        print("i", paths[i])
+        # if i[-1] is current:
+        #   curr_path = i #paths[-1]
+        #   print("curpath", curr_path)
       for neighbor in graph.vertices[current]:
         print("neighbor", neighbor)
         print("cat arr", paths[-1] + [neighbor])

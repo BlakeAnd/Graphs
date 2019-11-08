@@ -1,8 +1,12 @@
-
+import random
+from util import Stack, Queue
+# from graph import Graph
 
 class User:
     def __init__(self, name):
         self.name = name
+    def __repr__(self):
+        return self.name
 
 class SocialGraph:
     def __init__(self):
@@ -47,8 +51,23 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
+        for i in range(1, numUsers+1):
+            self.addUser(f"user{i}")
+        print("users", self.users)
 
+        possibleFriendships = []
+        for user_id in self.users:
+            for friend_id in range(user_id+1, self.lastID+1):
+                possibleFriendships.append((user_id, friend_id))
         # Create friendships
+        print("possibles friendships:", possibleFriendships)
+        random.shuffle(possibleFriendships)
+
+        totalFriendships = avgFriendships * numUsers
+        for i in range(totalFriendships // 2):
+            friendship = possibleFriendships[i]
+            self.addFriendship(friendship[0], friendship[1])
+
 
     def getAllSocialPaths(self, userID):
         """
@@ -61,6 +80,59 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        # graph = Graph()
+    
+        # for user in self.users:
+        #     graph.add_vertex(user)
+        # print("u graph", graph.vertices)
+        # print("friendships", self.friendships)
+
+        # for friendship in self.friendships:
+        #     print("f", friendship)
+            # graph.add_edge(edge[1], edge[0])
+        print("f", self.friendships)
+
+        q = Queue()
+        q.enqueue(userID)
+        # paths = [[1,3,4], [1,3,7]]
+        paths = {userID: [userID]}
+        visited = set()
+        
+
+
+        while q.size() > 0:
+          current = q.dequeue()
+          if current not in visited:
+            print("curr", current)
+            # print(graph.vertices[1])
+            visited.add(current)
+            # curr_path = paths[-1]
+            print("currpath", curr_path)
+            for neighbor in self.friendships[current]:
+                print("vis", visited)
+                if neighbor not in visited:
+                    # print("neighbor", neighbor)
+                    # print("cat arr", paths[-1] + [neighbor])
+                    paths.append(curr_path + [neighbor])
+                    print("paths:", paths)
+                    
+                    q.enqueue(neighbor)
+
+            longest_path = paths[0]
+            for path in paths:
+              if len(path) > len(longest_path) or path[-1] < longest_path[-1]:
+                longest_path = path
+
+        # print("paths:", paths)
+        # print("return len:", len(longest_path))
+        # print("return:", longest_path[-1])
+        # if len(longest_path) <= 1:
+        #   return -1
+        # else:
+        #   return longest_path[-1]
+        return paths
+        print("graph:", graph.vertices)
+
         return visited
 
 
@@ -69,4 +141,4 @@ if __name__ == '__main__':
     sg.populateGraph(10, 2)
     print(sg.friendships)
     connections = sg.getAllSocialPaths(1)
-    print(connections)
+    print("paths", connections)
